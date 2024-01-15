@@ -144,7 +144,7 @@
                         </div>
                         <div class="text-center">
                             <h3>
-                                Jessica Jones<span class="font-weight-light">, 27</span>
+                                <?= esc($user['name'] . " " . $user['surname']) ?><span class="font-weight-light">, <?= $age ?></span>
                             </h3>
                             <div class="h5 font-weight-300">
                                 <i class="ni location_pin mr-2"></i>Bucharest, Romania
@@ -185,7 +185,7 @@
                                             <label class="form-control-label" for="input-username">Username</label>
                                             <input type="text" id="input-username"
                                                    class="form-control form-control-alternative" placeholder="Username"
-                                                   value="lucky.jesse">
+                                                   value="<?= esc($user['name'] . $user['surname'])  ?>e">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -193,7 +193,7 @@
                                             <label class="form-control-label" for="input-email">Email address</label>
                                             <input type="email" id="input-email"
                                                    class="form-control form-control-alternative"
-                                                   placeholder="jesse@example.com">
+                                                   placeholder="<?= esc($user['email']) ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +203,7 @@
                                             <label class="form-control-label" for="input-first-name">First name</label>
                                             <input type="text" id="input-first-name"
                                                    class="form-control form-control-alternative"
-                                                   placeholder="First name" value="Lucky">
+                                                   placeholder="First name" value="<?= esc($user['name']) ?>">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -211,7 +211,7 @@
                                             <label class="form-control-label" for="input-last-name">Last name</label>
                                             <input type="text" id="input-last-name"
                                                    class="form-control form-control-alternative" placeholder="Last name"
-                                                   value="Jesse">
+                                                   value="<?= esc($user['surname']) ?>">
                                         </div>
                                     </div>
                                 </div>

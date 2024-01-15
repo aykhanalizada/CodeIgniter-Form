@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use DateTime;
 
 class Home extends BaseController
 {
@@ -112,8 +113,13 @@ class Home extends BaseController
         if (!$user) {
             return redirect()->to('');
         }
-//        die($userId);
-        return view('profile', ['user' => $user]);
+
+
+        $birthday=new DateTime($user['birthday']);
+$today= new DateTime();
+$age=$today->diff($birthday)->y;
+
+        return view('profile', ['user' => $user,'age' => $age]);
     }
 
 
