@@ -58,7 +58,7 @@ class Home extends BaseController
     {
 
         if ($this->isUserLoggedIn()) {
-            return redirect()->to('profile'); // Redirect to profile page
+            return redirect()->to('profile');
         } else {
             if ($this->request->is('post')) {
 
@@ -110,7 +110,6 @@ class Home extends BaseController
         $user = $user->find($userId);
 
         if (!$user) {
-            // User not found, you may want to handle this case accordingly
             return redirect()->to('');
         }
 //        die($userId);
