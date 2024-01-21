@@ -12,6 +12,7 @@ $routes->get('/profile','Home::profile');
 
 $routes->post('/register','Home::register');
 $routes->post('/login','Home::login');
+$routes->post('/profile','ProfileController::index');
 
 $routes->get('/logout','Home::logout');
 

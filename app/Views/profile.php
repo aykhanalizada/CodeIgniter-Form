@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="profile.css">
-    <title>Document</title>
+    <title>Profile</title>
 </head>
 
 <body>
@@ -40,18 +40,19 @@
                        src="https://demos.creative-tim.com/argon-dashboard/assets-old/img/theme/team-4.jpg">
                 </span>
                             <div class="media-body ml-2 d-none d-lg-block">
-                                <span class="mb-0 text-sm  font-weight-bold"> <?= esc($user['name'] . " " . $user['surname']) ?></span>
+                                <span class="mb-0 text-sm  font-weight-bold"> <?= esc(session('name') . " " . session('surname')) ?></span>
                             </div>
 
                         </div>
                     </a>
 
 
-                    <a class="nav-link pr-0" href="<?= site_url('logout') ?>" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    <a class="nav-link pr-0" href="<?= site_url('logout') ?>" role="button" data-toggle="dropdown"
+                       aria-haspopup="true"
                        aria-expanded="false">
-                    <div class="media-body ml-2 d-none d-lg-block">
-                        <span class="mb-0 text-sm  font-weight-bold">Logout</span>
-                    </div>
+                        <div class="media-body ml-2 d-none d-lg-block">
+                            <span class="mb-0 text-sm  font-weight-bold">Logout</span>
+                        </div>
                     </a>
 
 
@@ -94,7 +95,7 @@
         <div class="container-fluid d-flex align-items-center">
             <div class="row">
                 <div class="col-lg-7 col-md-10">
-                    <h1 class="display-2 text-white">Hello <?=esc($user['name']) ?></h1>
+                    <h1 class="display-2 text-white">Hello <?= esc(session('name')) ?></h1>
                     <p class="text-white mt-0 mb-5">This is your profile page. You can see the progress you've made with
                         your work and manage your projects or assigned tasks</p>
                     <a href="#!" class="btn btn-info">Edit profile</a>
@@ -144,7 +145,8 @@
                         </div>
                         <div class="text-center">
                             <h3>
-                                <?= esc($user['name'] . " " . $user['surname']) ?><span class="font-weight-light">, <?= $age ?></span>
+                                <?= esc(session('name') . " " . session('surname')) ?><span
+                                        class="font-weight-light">, <?= session('age') ?></span>
                             </h3>
                             <div class="h5 font-weight-300">
                                 <i class="ni location_pin mr-2"></i>Bucharest, Romania
@@ -170,30 +172,43 @@
                             <div class="col-8">
                                 <h3 class="mb-0">My account</h3>
                             </div>
+
+                            <?php if (isset($validation)): ?>
+                                <div style="color: #404040;">
+                                    <?= $validation->listErrors(); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <div class="col-4 text-right">
                                 <a href="#!" class="btn btn-sm btn-primary">Settings</a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form>
-                            <h6 class="heading-small text-muted mb-4">User information</h6>
+                        <?= form_open('profile', ['method' => 'POST']) ?>
+
+                        <?= form_hidden('user_id',session('user_id')); ?>
+
+                        <h6 class="heading-small text-muted mb-4">User information</h6>
+
+
+
                             <div class="pl-lg-4">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group focused">
                                             <label class="form-control-label" for="input-username">Username</label>
-                                            <input type="text" id="input-username"
-                                                   class="form-control form-control-alternative" placeholder="Username"
-                                                   value="<?= esc($user['name'] . $user['surname'])  ?>e">
+                                        <?= form_input(['type'=>'text','name'=>'username','class'=>'form-control form-control-alternative',
+                                        'placeholder'=> esc(session('name') .   session('surname')    )]) ?>
+
+
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-email">Email address</label>
-                                            <input type="email" id="input-email"
-                                                   class="form-control form-control-alternative"
-                                                   placeholder="<?= esc($user['email']) ?>">
+                                            <?= form_input(['type'=>'email','name'=>'email','class'=>'form-control form-control-alternative',
+                                                'placeholder'=> esc( session('email')   )]) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -201,17 +216,19 @@
                                     <div class="col-lg-6">
                                         <div class="form-group focused">
                                             <label class="form-control-label" for="input-first-name">First name</label>
-                                            <input type="text" id="input-first-name"
-                                                   class="form-control form-control-alternative"
-                                                   placeholder="First name" value="<?= esc($user['name']) ?>">
+
+                                            <?= form_input(['type'=>'text','name'=>'name','class'=>'form-control form-control-alternative',
+                                                'value'=> esc($user['name'])  , 'placeholder'=>"First Name"      ]) ?>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group focused">
                                             <label class="form-control-label" for="input-last-name">Last name</label>
-                                            <input type="text" id="input-last-name"
-                                                   class="form-control form-control-alternative" placeholder="Last name"
-                                                   value="<?= esc($user['surname']) ?>">
+
+                                            <?= form_input(['type'=>'text','name'=>'surname','class'=>'form-control form-control-alternative',
+                                                'value'=> esc($user['surname'])  , 'placeholder'=>"Last Name"      ]) ?>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -224,9 +241,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group focused">
                                             <label class="form-control-label" for="input-address">Address</label>
-                                            <input id="input-address" class="form-control form-control-alternative"
-                                                   placeholder="Home Address"
-                                                   value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text">
+                                            <?= form_input(['type'=>'text','name'=>'address','class'=>'form-control form-control-alternative',
+                                                'placeholder'=>"Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"      ]) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -234,25 +250,26 @@
                                     <div class="col-lg-4">
                                         <div class="form-group focused">
                                             <label class="form-control-label" for="input-city">City</label>
-                                            <input type="text" id="input-city"
-                                                   class="form-control form-control-alternative" placeholder="City"
-                                                   value="New York">
+
+                                            <?= form_input(['type'=>'text','name'=>'city','class'=>'form-control form-control-alternative',
+                                                'placeholder'=>"New York"      ]) ?>
+
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group focused">
                                             <label class="form-control-label" for="input-country">Country</label>
-                                            <input type="text" id="input-country"
-                                                   class="form-control form-control-alternative" placeholder="Country"
-                                                   value="United States">
+
+                                            <?= form_input(['type'=>'text','name'=>'country','class'=>'form-control form-control-alternative',
+                                                'placeholder'=>"United States"      ]) ?>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-country">Postal code</label>
-                                            <input type="number" id="input-postal-code"
-                                                   class="form-control form-control-alternative"
-                                                   placeholder="Postal code">
+
+                                            <?= form_input(['type'=>'number','name'=>'postal_code','class'=>'form-control form-control-alternative',
+                                                'placeholder'=>"Postal code"      ]) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -260,14 +277,43 @@
                             <hr class="my-4">
                             <!-- Description -->
                             <h6 class="heading-small text-muted mb-4">About me</h6>
+                        <div class="col-md-12">
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group focused">
+                                        <label class="form-control-label" for="input-city">Job</label>
+
+                                        <?= form_input(['type'=>'text','name'=>'job','class'=>'form-control form-control-alternative',
+                                            'placeholder'=>"Designer"      ]) ?>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group focused">
+                                        <label class="form-control-label" for="input-country">Education</label>
+
+                                        <?= form_input(['type'=>'text','name'=>'education','class'=>'form-control form-control-alternative',
+                                            'placeholder'=>"University of Oxford"      ]) ?>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
                             <div class="pl-lg-4">
                                 <div class="form-group focused">
                                     <label>About Me</label>
-                                    <textarea rows="4" class="form-control form-control-alternative"
-                                              placeholder="A few words about you ...">A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
+                                    <?= form_textarea(['name'=>'about','class'=>'form-control form-control-alternative',
+                                        'placeholder'=>"A few words about you ..."      ]) ?>
                                 </div>
                             </div>
-                        </form>
+
+
+                        <?= form_button(['type'=>'submit' ,'class'=>'btn btn-primary ml-2'],'Save') ?>
+
+                        <?=  form_close(); ?>
+
                     </div>
                 </div>
             </div>

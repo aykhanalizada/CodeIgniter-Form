@@ -27,7 +27,14 @@
                             </div>
                         <?php endif; ?>
 
-                        <?= form_open('login'); ?>
+                        <?php if (session()->has('error')) {  ?>
+                        <div class="fw-bold" style="color: lightcoral">
+                            <?php echo session()->getFlashdata('error') ?>
+
+                        </div>
+                    <?php } ?>
+
+                        <?= form_open('login',['method'=>'POST']); ?>
                         <div class="mb-3">
                             <label class="mb-2 text-muted" for="email">E-Mail Address</label>
                             <?= form_input(['type' => 'email', 'name' => 'email', 'required' => 'required', 'class' => 'form-control']); ?>
@@ -38,25 +45,26 @@
                         <div class="mb-3">
 
                             <label class="mb-2 text-muted" for="password">Passsword</label>
-                            <?=  form_password(['name'=>'password','required'=>'required','class'=>'form-control','id'=>'password']);       ?>
+                            <?= form_password(['name' => 'password', 'required' => 'required', 'class' => 'form-control', 'id' => 'password']); ?>
 
 
                         </div>
 
                         <div class="d-flex align-items-center">
 
-                            <?= form_button(['type'=>'submit','class'=>'btn btn-primary ms-auto'],"Login")  ?>
+                            <?= form_button(['type' => 'submit', 'class' => 'btn btn-primary ms-auto'], "Login") ?>
                         </div>
                         <?= form_close(); ?>
                     </div>
                     <div class="card-footer py-3 border-0">
                         <div class="text-center">
-                            Don't have an account? <a href="<?= site_url('register') ?>" class="text-dark">Create One</a>
+                            Don't have an account? <a href="<?= site_url('register') ?>" class="text-dark">Create
+                                One</a>
                         </div>
                     </div>
                 </div>
                 <div class="text-center mt-5 text-muted">
-                    Copyright &copy; 2017-2021 &mdash; Your Company
+                    Copyright &copy; 2012-2024 &mdash; Your Company
                 </div>
             </div>
         </div>

@@ -23,14 +23,14 @@ class Home extends BaseController
     {
 
         if ($this->isUserLoggedIn()) {
-            return redirect()->to('profile'); // Redirect to profile page
+            return redirect()->to('profile');
         } else {
-            $validate = [
+            $validated = [
                 'email' => 'required|valid_email',
                 'password' => 'required'
             ];
 
-            if (!$this->validate($validate)) {
+            if (!$this->validate($validated)) {
                 return view('', ['validation' => $this->validator]);
             }
 
@@ -38,21 +38,48 @@ class Home extends BaseController
             $email = $this->request->getPost('email');
             $password = $this->request->getPost('password');
 
-            $user = new User();
-            $user = $user->where('email', $email)->first();
+            $userModel = new User();
+            $userData = $userModel->where('email', $email)->first();
 
-            if ($user && password_verify($password, $user['password'])) {
+
+
+            if ($userData && password_verify($password, $userData['password'])) {
                 $session = session();
                 $session->set([
-                    'user_id' => $user['id']
+                    'user_id' => $userData['id']
                 ]);
 
-                return redirect()->to('profile');
+                $userId = session()->get('user_id');
+                $user = $userModel->find($userId);
+
+
+                $today = new DateTime();
+                $birthday = new DateTime($user['birthday']);
+
+                $age = $today->diff($birthday)->y;
+
+                if ($user) {
+                    session()->set([
+                        'name' => $user['name'],
+                        'surname' => $user['surname'],
+                        'email' => $user['email'],
+                        'age' => $age,
+                    ]);
+                }
+
+
+                return view('profile',$user);
             } else {
                 return redirect()->to('')->withInput()->with('error', 'Invalid email or password');
 
             }
         }
+    }
+
+    private function isUserLoggedIn()
+    {
+        $session = session();
+        return $session->has('user_id');
     }
 
     public function register()
@@ -63,7 +90,7 @@ class Home extends BaseController
         } else {
             if ($this->request->is('post')) {
 
-                $validate = [
+                $validated = [
                     'name' => 'required',
                     'surname' => 'required',
                     'email' => 'required|valid_email|is_unique[users.email]',
@@ -71,7 +98,7 @@ class Home extends BaseController
                     'confirm_password' => 'required|matches[password]'
                 ];
 
-                if (!$this->validate($validate)) {
+                if (!$this->validate($validated)) {
                     return view('register', ['validation' => $this->validator]);
                 }
 
@@ -97,6 +124,7 @@ class Home extends BaseController
             return view('register');
         }
     }
+
     public function profile()
     {
         $session = session();
@@ -115,13 +143,12 @@ class Home extends BaseController
         }
 
 
-        $birthday=new DateTime($user['birthday']);
-$today= new DateTime();
-$age=$today->diff($birthday)->y;
+        $birthday = new DateTime($user['birthday']);
+        $today = new DateTime();
+        $age = $today->diff($birthday)->y;
 
-        return view('profile', ['user' => $user,'age' => $age]);
+        return view('profile', ['user' => $user, 'age' => $age]);
     }
-
 
     public function logout()
     {
@@ -140,13 +167,6 @@ $age=$today->diff($birthday)->y;
 
 
         return redirect()->to('');
-    }
-
-
-    private function isUserLoggedIn()
-    {
-        $session = session();
-        return $session->has('user_id');
     }
 
 }
